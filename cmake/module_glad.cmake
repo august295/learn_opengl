@@ -1,0 +1,1 @@
+add_subdirectory(${ROOT_DIR}/3rdparty/glad)
