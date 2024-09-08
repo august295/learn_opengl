@@ -57,7 +57,10 @@ macro(CreateTarget ProjectName Type Group)
     endif()
 
     set_target_properties(${ProjectName} PROPERTIES
+        RELEASE_POSTFIX ""
         DEBUG_POSTFIX "d"
+        MINSIZEREL_POSTFIX ""
+        RELWITHDEBINFO_POSTFIX ""
         VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)"
     )
 

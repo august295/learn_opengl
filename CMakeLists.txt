@@ -27,9 +27,9 @@ set(CONFIGURATION_TYPES "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 
 foreach(CONFIGURATION_TYPE ${CONFIGURATION_TYPES})
     string(TOUPPER ${CONFIGURATION_TYPE} TYPE)
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${TYPE} ${BUILD_DIR}/${CONFIGURATION_TYPE}/lib) # .lib and .a
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${TYPE} ${BUILD_DIR}/${CONFIGURATION_TYPE}/lib) # .so and .dylib
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${TYPE} ${BUILD_DIR}/${CONFIGURATION_TYPE}/bin) # .exe and .dll
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${TYPE} ${BUILD_DIR}/lib) # .lib and .a
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${TYPE} ${BUILD_DIR}/lib) # .so and .dylib
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${TYPE} ${BUILD_DIR}/bin) # .exe and .dll
 endforeach()
 
 # 三方库
@@ -39,3 +39,11 @@ include(${ROOT_DIR}/cmake/module.cmake)
 
 # 执行文件
 add_subdirectory(src)
+
+# 拷贝资源文件
+add_custom_target(
+    "CopyTask" ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${ROOT_DIR}/resources/" "${BUILD_DIR}/bin/"
+    COMMENT "Copying resources"
+)
+set_property(TARGET "CopyTask" PROPERTY FOLDER "CMakePredefinedTargets")

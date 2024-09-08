@@ -163,37 +163,37 @@ BraceWrapping:
   AfterControlStatement: Always
 
   # 是否在枚举定义后换行？(true\false)
-  AfterEnum: false
+  AfterEnum: true
 
   # 是否在函数后换行？(true\false)
   AfterFunction: true
 
   # 是否在命名空间后换行？(true\false)
-  AfterNamespace: false
+  AfterNamespace: true
 
   # 是否在 ObjC 定义后换行？(true\false)
-  AfterObjCDeclaration: false
+  AfterObjCDeclaration: true
 
   # 是否在 struct 定义时换行？(true\false)
-  AfterStruct: false
+  AfterStruct: true
 
   # 是否在 union 定义后换行？(true\false)
-  AfterUnion: false
+  AfterUnion: true
 
   # 是否在 extern 后换行？(true\false)
-  AfterExternBlock: false
+  AfterExternBlock: true
 
   # 是否在 catch 前换行？(true\false)
-  BeforeCatch: false
+  BeforeCatch: true
 
   # 是否在 else 前换行？(true\false)
-  BeforeElse: false
+  BeforeElse: true
 
   # 是否在 lambda 前换行？(true\false)
-  BeforeLambdaBody: false
+  BeforeLambdaBody: true
 
   # 是否在 do-while 的 while 前换行？(true\false)
-  BeforeWhile: false
+  BeforeWhile: true
 
   # 大括号是否参与缩进？
   IndentBraces: false

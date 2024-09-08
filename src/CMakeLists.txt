@@ -1,3 +1,4 @@
 ﻿# 添加子目录，子目录下必须有CMakeLists.txt
 add_subdirectory(01getting_started/01hello_window)
 add_subdirectory(01getting_started/02hello_triangle)
+add_subdirectory(01getting_started/03shaders)
