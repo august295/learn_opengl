@@ -12,4 +12,3 @@ set(SOURCE_FILES
     "src/glad.c"
 )
 add_library(${ProjectName} ${HEADER_FILES} ${SOURCE_FILES})
-set_property(TARGET ${ProjectName} PROPERTY FOLDER "GLAD")

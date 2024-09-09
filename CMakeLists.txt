@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.15.0)
 
 # 项目名称
-set(UseProjectName "learn_opengL")
+set(UseProjectName "learn_opengl")
 project(${UseProjectName})
 
 # C++标准
@@ -35,6 +35,7 @@ endforeach()
 # 三方库
 include(${ROOT_DIR}/cmake/module_glfw.cmake)
 include(${ROOT_DIR}/cmake/module_glad.cmake)
+include(${ROOT_DIR}/cmake/module_glm.cmake)
 include(${ROOT_DIR}/cmake/module.cmake)
 
 # 执行文件
