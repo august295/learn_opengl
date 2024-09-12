@@ -11,15 +11,23 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "shader.h"
+#include "camera.h"
+
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
 /* 改变窗口改变大小 */
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 /* 处理输入 */
 void processInput(GLFWwindow* window);
+void processInput2(GLFWwindow* window);
 /* 处理鼠标 */
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void mouse_callback2(GLFWwindow* window, double xpos, double ypos);
 /* 处理鼠标滚轮 */
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void scroll_callback2(GLFWwindow* window, double xoffset, double yoffset);
+// 创建自己的LookAt函数
+glm::mat4 calculate_lookAt_matrix(glm::vec3 position, glm::vec3 target, glm::vec3 worldUp);
 
 // 设置
 const unsigned int SCR_WIDTH  = 800;
@@ -38,8 +46,8 @@ float lastFrame = 0.0f; // 上一帧的时间
 bool  firstMouse = true;
 float yaw        = -90.0f;
 float pitch      = 0.0f;
-float lastX      = 800.0f / 2.0;
-float lastY      = 600.0 / 2.0;
+float lastX      = SCR_WIDTH / 2.0f;
+float lastY      = SCR_HEIGHT / 2.0f;
 float fov        = 45.0f;
 
 // clang-format off
@@ -142,7 +150,7 @@ int primary()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // 着色器类
-    Shader ourShader("camera/7.1.camera.vs", "camera/7.1.camera.fs");
+    Shader ourShader("01getting_started/7.1.camera.vs", "01getting_started/7.1.camera.fs");
 
     // VBO VAO EBO
     unsigned int VBO, VAO;
@@ -171,7 +179,7 @@ int primary()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
     int            width, height, nrChannels;
-    unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load("01getting_started/container.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -193,7 +201,7 @@ int primary()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
-    data = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+    data = stbi_load("01getting_started/awesomeface.png", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -311,7 +319,7 @@ int primary_camera()
     glfwSetScrollCallback(window, scroll_callback);
 
     // 着色器类
-    Shader ourShader("camera/7.1.camera.vs", "camera/7.1.camera.fs");
+    Shader ourShader("01getting_started/7.1.camera.vs", "01getting_started/7.1.camera.fs");
 
     // VBO VAO EBO
     unsigned int VBO, VAO;
@@ -340,7 +348,7 @@ int primary_camera()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
     int            width, height, nrChannels;
-    unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load("01getting_started/container.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -362,7 +370,7 @@ int primary_camera()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
-    data = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+    data = stbi_load("01getting_started/awesomeface.png", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -442,14 +450,344 @@ int primary_camera()
     return 0;
 }
 
+int primary_class()
+{
+    // 初始化，指定版本 3.3，仅使用 Core profile
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
+    // 创建窗口
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    if (window == NULL)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
+
+    // 获取 OpenGL 函数地址
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }
+    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, mouse_callback2);
+    glfwSetScrollCallback(window, scroll_callback2);
+
+    // 着色器类
+    Shader ourShader("01getting_started/7.1.camera.vs", "01getting_started/7.1.camera.fs");
+
+    // VBO VAO EBO
+    unsigned int VBO, VAO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+
+    // 位置
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // 纹理
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    stbi_set_flip_vertically_on_load(true);
+    // 纹理 1
+    unsigned int texture1;
+    glGenTextures(1, &texture1);
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    // 为当前绑定的纹理对象设置环绕、过滤方式
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // 加载并生成纹理
+    int            width, height, nrChannels;
+    unsigned char* data = stbi_load("01getting_started/container.jpg", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+
+    // 纹理 2
+    unsigned int texture2;
+    glGenTextures(1, &texture2);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    // 为当前绑定的纹理对象设置环绕、过滤方式
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // 加载并生成纹理
+    data = stbi_load("01getting_started/awesomeface.png", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+
+    // 设置变量
+    ourShader.use();
+    ourShader.setInt("texture1", 0);
+    ourShader.setInt("texture2", 1);
+
+    // 允许深度测试
+    glEnable(GL_DEPTH_TEST);
+
+    // 循环渲染
+    while (!glfwWindowShouldClose(window))
+    {
+        // 计算时间差
+        float currentFrame = glfwGetTime();
+        deltaTime          = currentFrame - lastFrame;
+        lastFrame          = currentFrame;
+
+        // 输入
+        processInput2(window);
+
+        // 渲染指令
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // 绑定纹理
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2);
+
+        // 使用着色器类
+        ourShader.use();
+
+        // 投影
+        glm::mat4 projection = glm::mat4(1.0f);
+        projection           = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        ourShader.setMat4("projection", projection);
+
+        // 视图
+        glm::mat4 view = camera.GetViewMatrix();
+        ourShader.setMat4("view", view);
+
+        // 绘制图形
+        glBindVertexArray(VAO);
+        for (unsigned int i = 0; i < 10; i++)
+        {
+            // 模型
+            glm::mat4 model = glm::mat4(1.0f);
+            model           = glm::translate(model, cubePositions[i]);
+            float angle     = 20.0f * i;
+            model           = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            ourShader.setMat4("model", model);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+
+        // 检查并调用事件，交换缓冲
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    // 释放资源
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glfwTerminate();
+    return 0;
+}
+
+int exercises2()
+{
+    // 初始化，指定版本 3.3，仅使用 Core profile
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
+    // 创建窗口
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    if (window == NULL)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
+
+    // 获取 OpenGL 函数地址
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }
+    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+
+    // 着色器类
+    Shader ourShader("01getting_started/7.1.camera.vs", "01getting_started/7.1.camera.fs");
+
+    // VBO VAO EBO
+    unsigned int VBO, VAO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+
+    // 位置
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // 纹理
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    stbi_set_flip_vertically_on_load(true);
+    // 纹理 1
+    unsigned int texture1;
+    glGenTextures(1, &texture1);
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    // 为当前绑定的纹理对象设置环绕、过滤方式
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // 加载并生成纹理
+    int            width, height, nrChannels;
+    unsigned char* data = stbi_load("01getting_started/container.jpg", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+
+    // 纹理 2
+    unsigned int texture2;
+    glGenTextures(1, &texture2);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    // 为当前绑定的纹理对象设置环绕、过滤方式
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // 加载并生成纹理
+    data = stbi_load("01getting_started/awesomeface.png", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+
+    // 设置变量
+    ourShader.use();
+    ourShader.setInt("texture1", 0);
+    ourShader.setInt("texture2", 1);
+
+    // 允许深度测试
+    glEnable(GL_DEPTH_TEST);
+
+    // 循环渲染
+    while (!glfwWindowShouldClose(window))
+    {
+        // 计算时间差
+        float currentFrame = glfwGetTime();
+        deltaTime          = currentFrame - lastFrame;
+        lastFrame          = currentFrame;
+
+        // 输入
+        processInput(window);
+
+        // 渲染指令
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // 绑定纹理
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2);
+
+        // 使用着色器类
+        ourShader.use();
+
+        // 投影
+        glm::mat4 projection = glm::mat4(1.0f);
+        projection           = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        ourShader.setMat4("projection", projection);
+
+        // 视图
+        glm::mat4 view = glm::mat4(1.0f);
+        view           = calculate_lookAt_matrix(cameraPos, cameraPos + cameraFront, cameraUp);
+        ourShader.setMat4("view", view);
+
+        // 绘制图形
+        glBindVertexArray(VAO);
+        for (unsigned int i = 0; i < 10; i++)
+        {
+            // 模型
+            glm::mat4 model = glm::mat4(1.0f);
+            model           = glm::translate(model, cubePositions[i]);
+            float angle     = 20.0f * i;
+            model           = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            ourShader.setMat4("model", model);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+
+        // 检查并调用事件，交换缓冲
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    // 释放资源
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glfwTerminate();
+    return 0;
+}
+
 int main()
 {
     // 基本
     primary();
     primary_camera();
+    primary_class();
 
     // 练习
-    // exercises3();
+    exercises2();
 
     return 0;
 }
@@ -482,6 +820,31 @@ void processInput(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    }
+}
+void processInput2(GLFWwindow* window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(window, true);
+    }
+
+    float cameraSpeed = static_cast<float>(2.5 * deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        camera.ProcessKeyboard(FORWARD, deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        camera.ProcessKeyboard(LEFT, deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        camera.ProcessKeyboard(RIGHT, deltaTime);
     }
 }
 
@@ -517,6 +880,22 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     front.z     = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     cameraFront = glm::normalize(front);
 }
+void mouse_callback2(GLFWwindow* window, double xpos, double ypos)
+{
+    if (firstMouse)
+    {
+        lastX      = xpos;
+        lastY      = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+    lastX         = xpos;
+    lastY         = ypos;
+
+    camera.ProcessMouseMovement(xoffset, yoffset);
+}
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
@@ -526,4 +905,39 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
         fov = 1.0f;
     if (fov >= 45.0f)
         fov = 45.0f;
+}
+void scroll_callback2(GLFWwindow* window, double xoffset, double yoffset)
+{
+    camera.ProcessMouseScroll(static_cast<float>(yoffset));
+}
+
+glm::mat4 calculate_lookAt_matrix(glm::vec3 position, glm::vec3 target, glm::vec3 worldUp)
+{
+    // 1. Position = known
+    // 2. Calculate cameraDirection
+    glm::vec3 zaxis = glm::normalize(position - target);
+    // 3. Get positive right axis vector
+    glm::vec3 xaxis = glm::normalize(glm::cross(glm::normalize(worldUp), zaxis));
+    // 4. Calculate camera up vector
+    glm::vec3 yaxis = glm::cross(zaxis, xaxis);
+
+    // Create translation and rotation matrix
+    // In glm we access elements as mat[col][row] due to column-major layout
+    glm::mat4 translation = glm::mat4(1.0f); // Identity matrix by default
+    translation[3][0]     = -position.x;     // Third column, first row
+    translation[3][1]     = -position.y;
+    translation[3][2]     = -position.z;
+    glm::mat4 rotation    = glm::mat4(1.0f);
+    rotation[0][0]        = xaxis.x; // First column, first row
+    rotation[1][0]        = xaxis.y;
+    rotation[2][0]        = xaxis.z;
+    rotation[0][1]        = yaxis.x; // First column, second row
+    rotation[1][1]        = yaxis.y;
+    rotation[2][1]        = yaxis.z;
+    rotation[0][2]        = zaxis.x; // First column, third row
+    rotation[1][2]        = zaxis.y;
+    rotation[2][2]        = zaxis.z;
+
+    // Return lookAt matrix as combination of translation and rotation matrix
+    return rotation * translation; // Remember to read from right to left (first translation then rotation)
 }

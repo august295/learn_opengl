@@ -76,7 +76,7 @@ int primary()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // 着色器类
-    Shader ourShader("transformations/5.1.texture.vs", "transformations/5.1.texture.fs");
+    Shader ourShader("01getting_started/5.1.texture.vs", "01getting_started/5.1.texture.fs");
 
     // VBO VAO EBO
     unsigned int VBO, VAO, EBO;
@@ -111,7 +111,7 @@ int primary()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
     int            width, height, nrChannels;
-    unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load("01getting_started/container.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -133,7 +133,7 @@ int primary()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
-    data = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+    data = stbi_load("01getting_started/awesomeface.png", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -224,7 +224,7 @@ int exercises1()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // 着色器类
-    Shader ourShader("transformations/5.1.texture.vs", "transformations/5.1.texture.fs");
+    Shader ourShader("01getting_started/5.1.texture.vs", "01getting_started/5.1.texture.fs");
 
     // VBO VAO EBO
     unsigned int VBO, VAO, EBO;
@@ -259,7 +259,7 @@ int exercises1()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
     int            width, height, nrChannels;
-    unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load("01getting_started/container.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -281,7 +281,7 @@ int exercises1()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
-    data = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+    data = stbi_load("01getting_started/awesomeface.png", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -372,7 +372,7 @@ int exercises2()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // 着色器类
-    Shader ourShader("transformations/5.1.texture.vs", "transformations/5.1.texture.fs");
+    Shader ourShader("01getting_started/5.1.texture.vs", "01getting_started/5.1.texture.fs");
 
     // VBO VAO EBO
     unsigned int VBO, VAO, EBO;
@@ -407,7 +407,7 @@ int exercises2()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
     int            width, height, nrChannels;
-    unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load("01getting_started/container.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -429,7 +429,7 @@ int exercises2()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
-    data = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+    data = stbi_load("01getting_started/awesomeface.png", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);

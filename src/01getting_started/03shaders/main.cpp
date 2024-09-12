@@ -230,7 +230,7 @@ int primary_file()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // 着色器类
-    Shader ourShader("shaders/3.3.shader.vs", "shaders/3.3.shader.fs");
+    Shader ourShader("01getting_started/3.3.shader.vs", "01getting_started/3.3.shader.fs");
 
     // VBO VAO
     unsigned int VBO;
@@ -311,7 +311,7 @@ int exercises1()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // 着色器类
-    Shader ourShader("shaders/3.3.1.shader.vs", "shaders/3.3.shader.fs");
+    Shader ourShader("01getting_started/3.3.1.shader.vs", "01getting_started/3.3.shader.fs");
 
     // VBO VAO
     unsigned int VBO;
@@ -392,7 +392,7 @@ int exercises2()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // 着色器类
-    Shader ourShader("shaders/3.3.2.shader.vs", "shaders/3.3.shader.fs");
+    Shader ourShader("01getting_started/3.3.2.shader.vs", "01getting_started/3.3.shader.fs");
 
     // VBO VAO
     unsigned int VBO;
@@ -475,7 +475,7 @@ int exercises3()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // 着色器类
-    Shader ourShader("shaders/3.3.3.shader.vs", "shaders/3.3.shader.fs");
+    Shader ourShader("01getting_started/3.3.3.shader.vs", "01getting_started/3.3.shader.fs");
 
     // VBO VAO
     unsigned int VBO;

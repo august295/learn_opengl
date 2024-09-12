@@ -1,4 +1,4 @@
-﻿# 添加子目录，子目录下必须有CMakeLists.txt
+﻿# 入门
 add_subdirectory(01getting_started/01hello_window)
 add_subdirectory(01getting_started/02hello_triangle)
 add_subdirectory(01getting_started/03shaders)
@@ -6,3 +6,6 @@ add_subdirectory(01getting_started/04textures)
 add_subdirectory(01getting_started/05transformations)
 add_subdirectory(01getting_started/06coordinate_systems)
 add_subdirectory(01getting_started/07camera)
+
+# 光照
+add_subdirectory(02lighting/01colors)
