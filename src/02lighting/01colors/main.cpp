@@ -31,7 +31,7 @@ float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
 
 // 摄像机
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 6.0f));
 bool   firstMouse = true;
 float  lastX      = SCR_WIDTH / 2.0f;
 float  lastY      = SCR_HEIGHT / 2.0f;
@@ -145,11 +145,6 @@ int primary()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // 在此之前不要忘记首先 use 对应的着色器程序（来设定uniform）
-    lightingShader.use();
-    lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-    lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-
     // 允许深度测试
     glEnable(GL_DEPTH_TEST);
 
@@ -216,9 +211,6 @@ int main()
 {
     // 基本
     primary();
-
-    // 练习
-    // exercises2();
 
     return 0;
 }
