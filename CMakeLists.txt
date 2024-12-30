@@ -32,11 +32,18 @@ foreach(CONFIGURATION_TYPE ${CONFIGURATION_TYPES})
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${TYPE} ${BUILD_DIR}/bin) # .exe and .dll
 endforeach()
 
+# 类型后缀
+set(CMAKE_RELEASE_POSTFIX "")
+set(CMAKE_DEBUG_POSTFIX "d")
+set(CMAKE_MINSIZEREL_POSTFIX "")
+set(CMAKE_RELWITHDEBINFO_POSTFIX "")
+
 # 三方库
 include(${ROOT_DIR}/cmake/module_glfw.cmake)
 include(${ROOT_DIR}/cmake/module_glad.cmake)
 include(${ROOT_DIR}/cmake/module_glm.cmake)
 include(${ROOT_DIR}/cmake/module.cmake)
+add_subdirectory(3rdparty)
 
 # 执行文件
 add_subdirectory(src)
