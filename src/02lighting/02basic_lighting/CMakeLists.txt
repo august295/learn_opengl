@@ -13,3 +13,7 @@ include_directories(${ROOT_DIR}/3rdparty/stb)
 
 include_directories(${ROOT_DIR}/3rdparty/glm)
 target_link_libraries(${ProjectName} "glm::glm")
+
+include_directories(${ROOT_DIR}/3rdparty/imgui)
+include_directories(${ROOT_DIR}/3rdparty/imgui/backends)
+target_link_libraries(${ProjectName} "imgui")
