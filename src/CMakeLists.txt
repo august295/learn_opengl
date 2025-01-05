@@ -10,3 +10,4 @@ add_subdirectory(01getting_started/07camera)
 # 光照
 add_subdirectory(02lighting/01colors)
 add_subdirectory(02lighting/02basic_lighting)
+add_subdirectory(02lighting/03materials)
