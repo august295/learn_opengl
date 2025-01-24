@@ -20,7 +20,7 @@ set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMakePredefinedTargets")
 
 # 设置根目录
 set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(BUILD_DIR ${ROOT_DIR}/build)
+set(BUILD_DIR ${CMAKE_BINARY_DIR})
 
 # 为多种构建类型设置输出目录
 set(CONFIGURATION_TYPES "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
@@ -28,7 +28,7 @@ set(CONFIGURATION_TYPES "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 foreach(CONFIGURATION_TYPE ${CONFIGURATION_TYPES})
     string(TOUPPER ${CONFIGURATION_TYPE} TYPE)
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${TYPE} ${BUILD_DIR}/lib) # .lib and .a
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${TYPE} ${BUILD_DIR}/lib) # .so and .dylib
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${TYPE} ${BUILD_DIR}/bin) # .so and .dylib
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${TYPE} ${BUILD_DIR}/bin) # .exe and .dll
 endforeach()
 
