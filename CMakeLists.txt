@@ -39,9 +39,6 @@ set(CMAKE_MINSIZEREL_POSTFIX "")
 set(CMAKE_RELWITHDEBINFO_POSTFIX "")
 
 # 三方库
-include(${ROOT_DIR}/cmake/module_glfw.cmake)
-include(${ROOT_DIR}/cmake/module_glad.cmake)
-include(${ROOT_DIR}/cmake/module_glm.cmake)
 include(${ROOT_DIR}/cmake/module.cmake)
 add_subdirectory(3rdparty)
 

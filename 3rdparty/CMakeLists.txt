@@ -1,10 +1,31 @@
 ﻿cmake_minimum_required(VERSION 3.12)
 
 ####################################################################################################
+# glad
+####################################################################################################
+add_subdirectory(${ROOT_DIR}/3rdparty/glad)
+set_property(TARGET "glad" PROPERTY FOLDER "3rdparty")
+
+####################################################################################################
+# glfw
+####################################################################################################
+set(GLFW_BUILD_EXAMPLES OFF)
+set(GLFW_BUILD_TESTS OFF)
+set(GLFW_INSTALL OFF)
+
+add_subdirectory(${ROOT_DIR}/3rdparty/glfw)
+set_property(TARGET "glfw" PROPERTY FOLDER "3rdparty")
+set_property(TARGET "update_mappings" PROPERTY FOLDER "3rdparty")
+
+####################################################################################################
+# glm
+####################################################################################################
+add_subdirectory(${ROOT_DIR}/3rdparty/glm)
+set_property(TARGET "glm" PROPERTY FOLDER "3rdparty")
+
+####################################################################################################
 # imgui
 ####################################################################################################
-set(3rdpartyName "imgui")
-
 # 基础代码
 set(IMGUI_DIR "${ROOT_DIR}/3rdparty/imgui")
 include_directories(${IMGUI_DIR})
@@ -46,9 +67,23 @@ elseif(CMAKE_CXX_PLATFORM_ID MATCHES "Linux")
     source_group("Source Files" FILES ${SOURCE_FILES})
 endif()
 
-add_library(${3rdpartyName} ${HEADER_FILES} ${SOURCE_FILES})
+add_library("imgui" ${HEADER_FILES} ${SOURCE_FILES})
 
-target_link_libraries(${3rdpartyName} "opengl32")
-target_link_libraries(${3rdpartyName} "glfw")
+target_link_libraries("imgui" "opengl32")
+target_link_libraries("imgui" "glfw")
 
-set_property(TARGET ${3rdpartyName} PROPERTY FOLDER "3rdparty")
+set_property(TARGET "imgui" PROPERTY FOLDER "3rdparty")
+
+####################################################################################################
+# assimp
+####################################################################################################
+# 关闭选项
+set(BUILD_SHARED_LIBS OFF)
+set(ASSIMP_BUILD_TESTS OFF)
+set(ASSIMP_INSTALL OFF)
+
+add_subdirectory(assimp)
+
+set_property(TARGET "assimp" PROPERTY FOLDER "3rdparty")
+set_property(TARGET "zlibstatic" PROPERTY FOLDER "3rdparty")
+set_property(TARGET "UpdateAssimpLibsDebugSymbolsAndDLLs" PROPERTY FOLDER "3rdparty")
