@@ -77,8 +77,7 @@ set_property(TARGET "imgui" PROPERTY FOLDER "3rdparty")
 ####################################################################################################
 # assimp
 ####################################################################################################
-# 关闭选项
-set(BUILD_SHARED_LIBS OFF)
+set(BUILD_SHARED_LIBS ON)
 set(ASSIMP_BUILD_TESTS OFF)
 set(ASSIMP_INSTALL OFF)
 

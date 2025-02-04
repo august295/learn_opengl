@@ -39,8 +39,8 @@ set(CMAKE_MINSIZEREL_POSTFIX "")
 set(CMAKE_RELWITHDEBINFO_POSTFIX "")
 
 # 三方库
-include(${ROOT_DIR}/cmake/module.cmake)
 add_subdirectory(3rdparty)
+include(${ROOT_DIR}/cmake/module.cmake)
 
 # 执行文件
 add_subdirectory(src)

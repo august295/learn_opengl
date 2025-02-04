@@ -14,3 +14,6 @@ add_subdirectory(02lighting/03materials)
 add_subdirectory(02lighting/04lighting_maps)
 add_subdirectory(02lighting/05light_casters)
 add_subdirectory(02lighting/06multiple_lights)
+
+# 模型
+add_subdirectory(03model_loading/01model)
